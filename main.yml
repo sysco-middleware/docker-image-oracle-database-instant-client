@@ -1,0 +1,52 @@
+- hosts: 127.0.0.1
+  connection: local
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: create container
+      docker:
+        name: tmp-oracle-db-instant-client
+        image: "{{ base_image }}"
+        command: sleep infinity
+        volumes:
+          - "/opt/installers/oracle/db/12.2/instant-client-basic/12.1.0.2:/srv/files"
+        state: started
+
+    - add_host:
+        name: tmp-oracle-db-instant-client
+        groups: docker
+        ansible_connection: docker
+
+- hosts: tmp-oracle-db-instant-client
+  connection: docker
+  roles:
+    - role: sysco-middleware.oracle-database-instant-client
+
+- hosts: 127.0.0.1
+  connection: local
+  vars_files:
+    - vars/main.yml
+  tasks:
+    - name: docker commit
+      command: "docker commit tmp-oracle-db-instant-client tmp-oracle-db-instant-client"
+
+    - name: docker kill
+      command: "docker kill tmp-oracle-db-instant-client"
+
+    - name: docker rm
+      command: "docker rm tmp-oracle-db-instant-client"
+
+    - name: build image
+      command: "docker build -t {{ image_name }} ."
+
+    - name: docker tag
+      command: "docker tag {{ image_name }} {{ image_name }}:{{ item }}"
+      with_items: "{{ tags }}"
+
+    - name: docker rmi
+      command: "docker rmi tmp-oracle-db-instant-client"
+
+    # image should be push into a private registry
+    # - name: docker push
+    #   command: "docker push {{ image_name }}:{{ item }}"
+    #   with_items: "{{ tags }}"
