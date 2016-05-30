@@ -1,4 +1,4 @@
 base_image: syscomiddleware/oracle-jdk:centos-8
 image_name: syscomiddleware/oracle-database-instant-client
 tags:
-  - centos-12.1.0.2
+  - centos-12.1.0.2-jdk7
