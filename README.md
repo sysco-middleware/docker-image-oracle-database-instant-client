@@ -6,6 +6,12 @@ Image with Oracle Database Instant Client configured + SQL*Plus.
 
 syscomiddleware/oracle-jdk
 
+## Ansible roles
+
+- sysco-middleware.oracle-database-instant-client
+
+> ansible-galaxy install -f sysco-middleware.oracle-database-instant-client
+
 ## How to build it
 
 Define installers path:
