@@ -18,3 +18,9 @@ volumes:
 And run:
 
 > ansible-playbook main.yml
+
+## Tags
+
+- basic-12.1.0.2-jdk7-centos7
+
+- basic-12.1.0.2-jdk8-centos7
